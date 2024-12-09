@@ -6,8 +6,7 @@ _Disciplina de **Técnicas de Programação Avançada**, ministrada pelo Profess
 
 ### Equipe
 
-- Manoel Rodrigues Loureiro - [@ManoelRL](https://github.com/ManoelRL)
-- Sofia de Alcantara Silva - [@sofialctv](https://sofialctv)
+- João Pedro Pagotto da Costa - [@ManoelRL](https://github.com/JoaoPPagotto)
 
 ## Descrição do Problema
 
