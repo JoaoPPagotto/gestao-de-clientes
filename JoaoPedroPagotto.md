@@ -6,7 +6,7 @@ _Disciplina de **Técnicas de Programação Avançada**, ministrada pelo Profess
 
 ### Equipe
 
-- João Pedro Pagotto da Costa - [@ManoelRL](https://github.com/JoaoPPagotto)
+- João Pedro Pagotto da Costa - [@JoaoPPagotto](https://github.com/JoaoPPagotto)
 
 ## Descrição do Problema
 
