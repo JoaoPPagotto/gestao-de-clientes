@@ -61,9 +61,9 @@ ClienteGUI2 --> RemoverCliente : implementa
 ClienteGUI2 --> PesquisarCliente : implementa
 ClienteGUI2 --> OrdenarCliente : implementa
 
-OrdenarCliente --> ArquivoCliente : modifica
-RemoverCliente --> ArquivoCliente : modifica
-InserirCliente --> ArquivoCliente : modifica
+OrdenarCliente --> ArquivoCliente : altera
+RemoverCliente --> ArquivoCliente : altera
+InserirCliente --> ArquivoCliente : altera
 
 PesquisarCliente --> Cliente : lista 
 ```
