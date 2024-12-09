@@ -175,6 +175,6 @@ Certifique-se de ter instalado as seguintes ferramentas:
 3. Execute o arquivo `ClienteGUI2.java`.
 
 ## Link para o Código-Fonte
-O código-fonte completo da aplicação pode ser acessado em https://github.com/sofialctv/gestao-de-clientes
+O código-fonte completo da aplicação pode ser acessado em [https://github.com/JoaoPPagotto/gestao-de-clientes](https://github.com/JoaoPPagotto/gestao-de-clientes)
 
 ---
