@@ -68,77 +68,63 @@ InserirCliente --> ArquivoCliente : modifica
 PesquisarCliente --> Cliente : lista 
 ```
 
-### Descrição da Arquitetura
-A arquitetura do sistema pode ser dividida em quatro camadas principais, com cada um desempenhando um papel específico:
+# Descrição da Arquitetura
 
-#### Camada de Interfaces (Interfaces)
-* **ArquivoSequencial:** Esta classe define uma interface para o gerenciamento de arquivos sequenciais, permitindo a leitura e gravação dos dados.
+A arquitetura do sistema está estruturada em quatro camadas principais, cada uma com responsabilidades específicas para facilitar a organização e o funcionamento do sistema:
 
-* **Buffer:** Define uma interface que gerencia o buffer de dados dos clientes, proporcionando uma abstração para manipulação de dados temporários.
+## Camada de Interfaces (Interfaces)
+- **ArquivoSequencial**: Fornece uma interface para a manipulação de arquivos sequenciais, possibilitando operações de leitura e escrita de dados.
+- **Buffer**: Define a interface para gerenciar buffers, oferecendo uma abstração para o armazenamento e manipulação temporária dos dados de clientes.
 
-##### Camada de Modelos (Models)
+## Camada de Modelos (Models)
+- **ArquivoCliente**: Representa os arquivos onde os dados dos clientes estão armazenados. É responsável por realizar operações de leitura e gravação no sistema de arquivos.
+- **BufferDeClientes**: Implementa a funcionalidade de buffer, armazenando temporariamente os registros de clientes e fornecendo acesso eficiente ao sistema.
+- **Cliente**: Modelo que encapsula as informações de um cliente, incluindo atributos como nome, telefone, endereço, entre outros dados relevantes.
 
-* **ArquivoCliente:** Representa os arquivos que armazenam os dados dos clientes, sendo responsável pela leitura e escrita desses dados no sistema de arquivos.
+## Camada de Utilitários (Utils)
+- **GeradorDeArquivosDeClientes**: Gera dados fictícios de clientes em larga escala, criando arquivos úteis para testes ou para preencher o sistema com informações simuladas.
+- **OrdenarCliente**: Responsável pela ordenação dos registros de clientes, permitindo que os dados sejam organizados em ordem alfabética.
 
-* **BufferDeClientes:** Esta classe implementa o buffer de dados, armazenando e fornecendo os registros dos clientes para o sistema.
+## Camada de Visualização (Views)
+- **ClienteGUI2**: A interface gráfica principal do sistema, que permite aos usuários visualizar, gerenciar e modificar os dados dos clientes.
+- **InserirCliente**: Fornece uma interface dedicada para a adição de novos clientes ao sistema.
+- **PesquisarCliente**: Permite que os usuários realizem buscas nos registros existentes para localizar clientes específicos.
+- **RemoverCliente**: Oferece uma interface para a exclusão de clientes, com ferramentas para gerenciar a remoção segura dos registros no sistema.
 
-* **Cliente:** Modelo que representa os dados de um cliente, incluindo informações como nome, telefone, endereço, e outros atributos associados ao cliente.
-
-#### Camada de Utilitários (Utils):
-
-* **GeradorDeArquivosDeClientes:** Responsável pela criação de arquivos de clientes fictícios, gerando dados em larga escala para testar ou popular o sistema com informações de clientes.
-
-* **OrdenarCliente:** Fornece a funcionalidade para ordenar os dados dos clientes, permitindo a organização dos registros em ordem alfabética.
-
-##### Camada de Visualização (Views):
-
-* **ClienteGUI2:** Interface gráfica principal do sistema, permitindo que o usuário interaja com a aplicação para gerenciar, visualizar e modificar os dados dos clientes.
-
-* **InserirCliente:** Interface para inserção de novos clientes no sistema.
-
-* **PesquisarCliente:** Interface que permite ao usuário pesquisar clientes existentes dentro do sistema.
-
-* **RemoverCliente:** Interface para remover clientes do sistema, com ações associadas à manipulação dos dados.
+Essa estrutura modular garante a separação de responsabilidades e facilita a manutenção e expansão do sistema ao longo do tempo.
 
 ---
 
-## Descrição dos Principais Algoritmos Utilizados
+# Descrição dos Principais Algoritmos Utilizados
 
-### External Merge Sort (Ordenação Externa)
+## Ordenação Externa com Merge Sort (External Merge Sort)
 
-O algoritmo de ordenação utilizado na classe OrdenarCliente é baseado no External Merge Sort (ou Ordenação Externa). Esse algoritmo é adequado para ordenar grandes volumes de dados que não cabem na memória principal (RAM). A ordenação é realizada em duas etapas principais: divisão dos dados em partes menores (chunks) que cabem na memória e, em seguida, a mesclagem dessas partes já ordenadas para produzir um único arquivo final ordenado.
+O algoritmo empregado na classe **OrdenarCliente** é uma versão do Merge Sort adaptada para ordenação externa. Esse método é ideal para lidar com grandes volumes de dados que excedem a capacidade de memória principal (RAM). Ele funciona em duas etapas principais: a criação de partes menores (chunks) ordenadas e, posteriormente, a fusão dessas partes para gerar um arquivo final ordenado.
 
-#### Etapa 1: Divisão dos Dados em Partes Ordenadas (Chunks)
-Na primeira fase, o algoritmo lê partes dos dados do arquivo de entrada, organiza essas partes (chunks) na memória e, em seguida, grava esses chunks já ordenados em arquivos temporários.
+### Etapa 1: Divisão dos Dados em Partes Ordenadas (Chunks)
+Nesta etapa, o algoritmo divide os dados em blocos menores que podem ser carregados e ordenados na memória.
 
-* **Leitura do arquivo original:** O arquivo contendo os objetos Cliente é lido em blocos de tamanho fixo, determinado pela constante CHUNK_SIZE.
+- **Leitura dos dados**: Os dados do arquivo de entrada são lidos em blocos de tamanho fixo, definidos pela constante `CHUNK_SIZE`.
+- **Ordenação na memória**: Cada bloco lido é ordenado utilizando o método `Collections.sort()`, que internamente usa QuickSort ou Timsort, dependendo da implementação da JVM.
+- **Gravação dos chunks**: Os blocos ordenados são gravados em arquivos temporários no disco.
 
-* **Ordenação de cada chunk:** Cada bloco é ordenado em memória usando o método Collections.sort(), que usa o algoritmo de QuickSort ou Timsort, dependendo da implementação da JVM.
-
-* **Gravação dos chunks ordenados:** Após a ordenação, o bloco é gravado em um arquivo temporário.**
-
-```commandline
-// Exemplo de pseudocódigo
-
-Enquanto não houver mais dados:
+#### Pseudocódigo da Etapa 1
+```plaintext
+Enquanto houver dados não processados:
    Ler um bloco de dados (tamanho CHUNK_SIZE)
    Ordenar o bloco na memória
    Gravar o bloco ordenado em um arquivo temporário
-Repetir até que todos os dados sejam lidos
 ```
 
-#### Etapa 2: Mesclagem dos Chunks Ordenados
-Após criar todos os arquivos temporários, o algoritmo realiza a mesclagem desses arquivos para criar o arquivo final ordenado. A mesclagem é feita utilizando uma fila de prioridade (PriorityQueue), que mantém os primeiros elementos de cada chunk temporário. A fila sempre mantém o menor elemento no topo, permitindo que os menores registros sejam escritos no arquivo final em ordem crescente.
+### Etapa 2: Mesclagem dos Chunks Ordenados
+Após a criação dos arquivos temporários, ocorre a fusão dos chunks ordenados para produzir o arquivo final.
 
-* **Abrir streams dos arquivos temporários:** Para cada arquivo temporário gerado na etapa anterior, um ObjectInputStream é aberto para leitura sequencial.
+- **Abertura de streams**: Para cada arquivo temporário gerado, um `ObjectInputStream` é utilizado para leitura sequencial.
+- **Fila de prioridade**: Uma `PriorityQueue` é usada para gerenciar os menores elementos de cada chunk, permitindo que os dados sejam escritos no arquivo final em ordem crescente.
+- **Processo de mesclagem**: O menor elemento é retirado da fila, gravado no arquivo de saída, e o próximo elemento do mesmo chunk é adicionado à fila.
 
-* **Fila de prioridade:** A fila de prioridade é utilizada para armazenar o primeiro elemento de cada chunk. A cada iteração, o menor elemento da fila é removido e gravado no arquivo de saída, enquanto o próximo elemento do chunk correspondente é adicionado à fila.
-
-* **Mesclagem final:** O processo continua até que todos os chunks tenham sido totalmente mesclados e o arquivo final seja completo.
-
-````commandline
-// Exemplo de pseudocódigo
-
+#### Pseudocódigo da Etapa 2
+```plaintext
 Criar uma fila de prioridade (PriorityQueue)
 
 Para cada arquivo temporário:
@@ -148,15 +134,23 @@ Enquanto a fila de prioridade não estiver vazia:
     Remover o menor elemento da fila
     Gravar o elemento no arquivo final ordenado
     Ler o próximo elemento do arquivo temporário correspondente e adicioná-lo à fila
-````
-### Estrutura da Fila de Prioridade
+```
 
-A fila de prioridade (PriorityQueue<ClienteEntry>) mantém um objeto ClienteEntry, que contém o cliente e o índice do arquivo temporário de onde ele foi lido. A comparação entre os clientes é feita com base na implementação do método compareTo() na classe Cliente, permitindo a ordenação por atributos como o nome ou qualquer outro critério definido.
+### Estrutura da Fila de Prioridade (Priority Queue)
+A fila de prioridade gerencia objetos do tipo `ClienteEntry`, que encapsulam o cliente e o índice do arquivo temporário de origem. A comparação entre os objetos é baseada no método `compareTo()` da classe **Cliente**, permitindo que a ordenação seja realizada por atributos como o nome ou qualquer outro critério especificado.
 
-### Complexidade do Algoritmo:
-* **Fase de criação dos chunks:** O custo de leitura e gravação dos chunks é proporcional ao número de elementos no arquivo original, ou seja, `O(N)`. A ordenação de cada chunk tem complexidade `O(M log M)`, onde M é o tamanho do chunk, geralmente limitado pela quantidade de memória disponível.
+### Complexidade do Algoritmo
 
-* **Fase de mesclagem:** A mesclagem dos arquivos temporários usa uma fila de prioridade, que opera em O(log K) para cada inserção e remoção, onde K é o número de chunks. Para N elementos, a complexidade total da mesclagem é `O(N log K)`.
+#### Criação dos Chunks
+- **Leitura e gravação**: O(N), onde N é o número total de elementos.
+- **Ordenação de cada chunk**: O(M log M), sendo M o tamanho do chunk.
+
+#### Mesclagem dos Chunks
+- **Inserção e remoção na fila de prioridade**: O(log K) para cada operação, onde K é o número de chunks.
+- **Complexidade total da mesclagem**: O(N log K), considerando N elementos.
+
+O algoritmo é eficiente para lidar com grandes volumes de dados, otimizando o uso da memória principal ao distribuir a carga para o disco.
+
 
 ---
 ## Pré-requisitos
